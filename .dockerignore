@@ -1,0 +1,6 @@
+.git
+.github
+docs
+*.Rcheck
+*.tar.gz
+man/figures
