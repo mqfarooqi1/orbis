@@ -1,13 +1,21 @@
-# orbis <img src="man/figures/logo.png" align="right" height="139" alt="orbis logo" />
+# orbis <a href="https://mqfarooqi1.github.io/orbis/"><img src="man/figures/logo.png" align="right" height="139" alt="orbis website" /></a>
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/mqfarooqi1/orbis/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mqfarooqi1/orbis/actions/workflows/R-CMD-check.yaml)
+[![Documentation](https://img.shields.io/badge/docs-pkgdown-4C6EF5.svg)](https://mqfarooqi1.github.io/orbis/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+<!-- badges: end -->
+
+<!--
+CRAN badges: add these back once the package is accepted on CRAN, and the
+R-universe badge once the first R-universe build has completed. Before then
+they render as broken images, because the badge services have nothing to report.
+
 [![CRAN status](https://www.r-pkg.org/badges/version/orbis)](https://CRAN.R-project.org/package=orbis)
 [![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/orbis)](https://CRAN.R-project.org/package=orbis)
 [![R-universe](https://mqfarooqi1.r-universe.dev/badges/orbis)](https://mqfarooqi1.r-universe.dev/orbis)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-<!-- badges: end -->
+-->
 
 **A layered grammar of graphics for R that is interactive by default, sharp at
 any resolution, and knows the world map.**
@@ -46,7 +54,7 @@ orb(mtcars, x = wt, y = mpg, colour = hp, size = disp) +
            y = "Miles per gallon", colour = "Horsepower")
 ```
 
-<img src="man/figures/scatter.png" width="100%" />
+<img src="man/figures/scatter.png" width="100%" alt="Scatter plot of fuel economy against weight, points coloured by horsepower and sized by displacement" />
 
 ## The world, built in
 
@@ -56,7 +64,7 @@ orb_worldmap(values = gdp, value_col = "v", projection = "robinson",
   orb_labs(title = "World choropleth")
 ```
 
-<img src="man/figures/choropleth.png" width="100%" />
+<img src="man/figures/choropleth.png" width="100%" alt="World choropleth in the Robinson projection, countries shaded by value" />
 
 Switch one argument for a globe:
 
@@ -80,7 +88,7 @@ orb(mtcars, x = wt, y = mpg, colour = hp) +
   orb_labs(title = "Small multiples by cylinder count")
 ```
 
-<img src="man/figures/facet.png" width="100%" />
+<img src="man/figures/facet.png" width="100%" alt="Three small-multiple panels of fuel economy, one per cylinder count, sharing axes and a colour legend" />
 
 Panels share their scales by default, so they are directly comparable; pass
 `scales = "free"` (or `"free_x"` / `"free_y"`) to let each panel stretch to its

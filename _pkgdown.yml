@@ -1,0 +1,62 @@
+url: https://mqfarooqi1.github.io/orbis/
+
+template:
+  bootstrap: 5
+  light-switch: true
+  bslib:
+    primary: "#4C6EF5"
+    base_font: {google: "Inter"}
+    heading_font: {google: "Inter"}
+    code_font: {google: "Source Code Pro"}
+
+navbar:
+  structure:
+    left:  [intro, reference, articles, news]
+    right: [search, lightswitch, github]
+
+reference:
+- title: "Building a plot"
+  desc: >
+    Start a plot, then add layers, labels and options with `+`.
+  contents:
+  - orb
+  - "`+.orb_spec`"
+  - orb_labs
+  - orb_options
+- title: "Layers"
+  desc: "Geometries drawn from the data."
+  contents:
+  - orb_points
+  - orb_line
+  - orb_bars
+  - orb_area
+  - orb_text
+- title: "Maps and projections"
+  desc: >
+    Geographic layers and coordinate systems, including an orthographic globe.
+  contents:
+  - orb_map
+  - orb_geo_points
+  - orb_worldmap
+  - orb_coord_map
+  - orb_coord_cartesian
+  - world_map
+- title: "Small multiples"
+  contents:
+  - orb_facet
+- title: "Scales, themes and palettes"
+  contents:
+  - orb_scale
+  - orb_theme
+  - orb_palettes
+- title: "Output"
+  desc: >
+    Interactive SVG, or publication-quality raster and vector output.
+  contents:
+  - orb_save
+  - orb_svg
+  - orb_interactive
+  - orb_draw
+- title: "Package"
+  contents:
+  - orbis-package
