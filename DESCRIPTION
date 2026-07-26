@@ -11,10 +11,14 @@ Description: A layered grammar of graphics that compiles plots to a
     toggling) and R's own graphics devices for publication-quality output at
     any resolution. Geographic layers are first class: a simplified world
     polygon dataset ships with the package and can be drawn with several map
-    projections, including equirectangular, Mercator, Robinson and an
-    orthographic globe. Projections follow Snyder (1987)
-    <doi:10.3133/pp1395>; line simplification uses Douglas and Peucker (1973)
-    <doi:10.3138/FM57-6770-U75U-7727>.
+    projections, including Robinson, Equal Earth and an orthographic globe.
+    The layered grammar follows Wickham (2010) <doi:10.1198/jcgs.2009.07098>;
+    projections follow Snyder (1987) <doi:10.3133/pp1395> and, for Equal Earth,
+    Savric, Patterson and Jenny (2019) <doi:10.1080/13658816.2018.1504949>;
+    line simplification uses Douglas and Peucker (1973)
+    <doi:10.3138/FM57-6770-U75U-7727>; the default colour scales follow the
+    guidance on perceptually uniform palettes of Crameri, Shephard and Heron
+    (2020) <doi:10.1038/s41467-020-19160-7>.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Language: en-GB

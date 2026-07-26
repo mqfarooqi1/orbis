@@ -1,8 +1,12 @@
-# orbis <img src="man/figures/globe.png" align="right" height="132" alt="orbis" />
+# orbis <img src="man/figures/logo.png" align="right" height="139" alt="orbis logo" />
 
 <!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![R-CMD-check](https://github.com/mqfarooqi1/orbis/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mqfarooqi1/orbis/actions/workflows/R-CMD-check.yaml)
+[![CRAN status](https://www.r-pkg.org/badges/version/orbis)](https://CRAN.R-project.org/package=orbis)
+[![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/orbis)](https://CRAN.R-project.org/package=orbis)
+[![R-universe](https://mqfarooqi1.r-universe.dev/badges/orbis)](https://mqfarooqi1.r-universe.dev/orbis)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![R >= 4.1](https://img.shields.io/badge/R-%3E%3D%204.1-blue)](https://www.r-project.org/)
 <!-- badges: end -->
 
 **A layered grammar of graphics for R that is interactive by default, sharp at
@@ -19,7 +23,7 @@ scene description** and hands that to two renderers:
   resolution you ask for.
 
 Geography is not an add-on. A simplified world polygon dataset ships with the
-package, and five map projections — including an orthographic globe — are built
+package, and six map projections — including Equal Earth and an orthographic globe — are built
 in.
 
 ## Installation
@@ -63,7 +67,8 @@ orb_worldmap(values = gdp, value_col = "v", projection = "orthographic",
   orb_theme_dark()
 ```
 
-Projections available: `equirectangular`, `mercator`, `robinson`, `mollweide`
+Projections available: `equirectangular`, `mercator`, `robinson`, `mollweide`,
+`equalearth` (the modern equal-area projection of Savric, Patterson & Jenny)
 and `orthographic`. Points can be placed on any of them with `orb_geo_points()`.
 
 ## Small multiples
@@ -106,7 +111,7 @@ pan, double-click to reset, and click a legend key to hide or show that series.
 | `orb()` | Start a plot: data plus a mapping from variables to channels |
 | `orb_points()`, `orb_line()`, `orb_bars()`, `orb_area()`, `orb_text()` | Layers |
 | `orb_map()`, `orb_geo_points()`, `orb_worldmap()` | Geographic layers |
-| `orb_coord_map()` | Five map projections, including an orthographic globe |
+| `orb_coord_map()` | Six map projections, including Equal Earth and an orthographic globe |
 | `orb_facet()` | Small multiples: one panel per level, shared or free scales |
 | `orb_scale_colour()`, `orb_scale_fill()`, `orb_scale_size()`, `orb_scale_x()`, `orb_scale_y()` | Scales, limits, log and square-root axes |
 | `orb_theme_light()`, `orb_theme_dark()`, `orb_theme_minimal()`, `orb_theme_ink()` | Themes |
@@ -130,11 +135,23 @@ package. In particular:
 
 ## References
 
+* Wickham, H. (2010) "A Layered Grammar of Graphics." *Journal of
+  Computational and Graphical Statistics* 19, 3-28.
+  [doi:10.1198/jcgs.2009.07098](https://doi.org/10.1198/jcgs.2009.07098)
+* Šavrič, B., Patterson, T. & Jenny, B. (2019) "The Equal Earth map
+  projection." *International Journal of Geographical Information Science* 33,
+  454-465.
+  [doi:10.1080/13658816.2018.1504949](https://doi.org/10.1080/13658816.2018.1504949)
+* Crameri, F., Shephard, G. E. & Heron, P. J. (2020) "The misuse of colour in
+  science communication." *Nature Communications* 11, 5444.
+  [doi:10.1038/s41467-020-19160-7](https://doi.org/10.1038/s41467-020-19160-7)
 * Snyder, J. P. (1987) *Map Projections: A Working Manual.* US Geological
-  Survey Professional Paper 1395. <doi:10.3133/pp1395>
+  Survey Professional Paper 1395.
+  [doi:10.3133/pp1395](https://doi.org/10.3133/pp1395)
 * Douglas, D. H. & Peucker, T. K. (1973) "Algorithms for the reduction of the
   number of points required to represent a digitized line or its caricature."
-  *Cartographica* 10, 112-122. <doi:10.3138/FM57-6770-U75U-7727>
+  *Cartographica* 10, 112-122.
+  [doi:10.3138/FM57-6770-U75U-7727](https://doi.org/10.3138/FM57-6770-U75U-7727)
 
 World boundaries derive from Natural Earth (public domain), via the `maps`
 package.

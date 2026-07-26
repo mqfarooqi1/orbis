@@ -10,7 +10,7 @@ test_that("every projection returns finite coordinates", {
   long <- c(-180, -90, 0, 90, 180, 12.5)
   lat <- c(-85, -45, 0, 45, 85, 51.5)
   for (pr in c("equirectangular", "mercator", "robinson", "mollweide",
-               "orthographic")) {
+               "equalearth", "orthographic")) {
     co <- orb_coord_map(pr)
     p <- orbis:::.project(long, lat, co)
     expect_length(p$x, length(long))
@@ -37,7 +37,7 @@ test_that("an unknown projection is rejected", {
 
 test_that("every projection renders a world map", {
   for (pr in c("equirectangular", "mercator", "robinson", "mollweide",
-               "orthographic")) {
+               "equalearth", "orthographic")) {
     s <- orb_svg(orb_worldmap(projection = pr), interactive = FALSE)
     expect_true(grepl("<path", s, fixed = TRUE), info = pr)
     expect_gt(nchar(s), 10000)
@@ -70,4 +70,29 @@ test_that("an ocean layer is drawn when requested", {
   s2 <- orb_svg(orb_worldmap(ocean = "#0B1F33"), interactive = FALSE)
   expect_true(grepl("#0B1F33", s2, fixed = TRUE))
   expect_false(grepl("#0B1F33", s1, fixed = TRUE))
+})
+
+test_that("Equal Earth preserves relative area", {
+  # An equal-area projection maps equal areas on the sphere to equal areas on
+  # the page. A 10 x 10 degree graticule cell does NOT have constant area on
+  # the sphere (it shrinks towards the poles as sin(lat)), so the test is that
+  # projected area stays proportional to true spherical area.
+  co <- orb_coord_map("equalearth")
+  projected <- function(lat0) {
+    p <- orbis:::.project(c(0, 10, 10, 0), c(lat0, lat0, lat0 + 10, lat0 + 10), co)
+    x <- p$x; y <- p$y
+    abs(sum(x * c(y[-1], y[1]) - c(x[-1], x[1]) * y)) / 2   # shoelace
+  }
+  spherical <- function(lat0) {
+    sin((lat0 + 10) * pi / 180) - sin(lat0 * pi / 180)
+  }
+  ratio <- vapply(c(0, 20, 40, 50), function(l) projected(l) / spherical(l),
+                  numeric(1))
+  expect_equal(max(ratio) / min(ratio), 1, tolerance = 0.03)
+})
+
+test_that("Equal Earth is wider than it is tall, like a world map", {
+  co <- orb_coord_map("equalearth")
+  p <- orbis:::.project(c(-180, 180, 0, 0), c(0, 0, -90, 90), co)
+  expect_gt(diff(range(p$x)), diff(range(p$y)))
 })

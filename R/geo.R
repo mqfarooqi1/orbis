@@ -14,6 +14,10 @@
 #'     \eqn{\pm}`max_lat`.}
 #'   \item{`robinson`}{A compromise projection widely used for world maps.}
 #'   \item{`mollweide`}{Equal-area pseudo-cylindrical projection.}
+#'   \item{`equalearth`}{The Equal Earth projection of Savric, Patterson and
+#'     Jenny (2019): equal-area, like Mollweide, but with continents shaped
+#'     much closer to the familiar Robinson outline. A good modern default for
+#'     thematic world maps, because areas are not distorted.}
 #'   \item{`orthographic`}{A view of the globe from infinite distance, centred
 #'     on `centre`; the hemisphere facing away from the viewer is hidden.}
 #' }
@@ -23,16 +27,23 @@
 #'   centre of an orthographic view.
 #' @param max_lat Latitude at which the Mercator projection is clipped.
 #' @return An object of class `orb_coord`, to be added to a plot.
-#' @references Snyder, J. P. (1987) "Map Projections: A Working Manual."
-#'   US Geological Survey Professional Paper 1395. \doi{10.3133/pp1395}
+#' @references
+#' Snyder, J. P. (1987) "Map Projections: A Working Manual." US Geological
+#' Survey Professional Paper 1395. \doi{10.3133/pp1395}
+#'
+#' Savric, B., Patterson, T. & Jenny, B. (2019) "The Equal Earth map
+#' projection." International Journal of Geographical Information Science 33,
+#' 454-465. \doi{10.1080/13658816.2018.1504949}
 #' @examples
 #' orb_worldmap() + orb_coord_map("robinson")
+#' orb_worldmap() + orb_coord_map("equalearth")
 #' orb_worldmap() + orb_coord_map("orthographic", centre = c(20, 15))
 #' @export
 orb_coord_map <- function(projection = "equirectangular", centre = c(0, 0),
                           max_lat = 84) {
   projection <- match.arg(projection,
-    c("equirectangular", "mercator", "robinson", "mollweide", "orthographic"))
+    c("equirectangular", "mercator", "robinson", "mollweide", "equalearth",
+      "orthographic"))
   structure(list(type = "map", projection = projection, centre = centre,
                  max_lat = max_lat), class = "orb_coord")
 }
@@ -97,6 +108,13 @@ orb_coord_cartesian <- function(ratio = NULL) {
     }
     x <- (2 * sqrt(2) / pi) * lam * cos(th) * 57.29577951
     y <- sqrt(2) * sin(th) * 57.29577951
+  } else if (proj == "equalearth") {
+    # Savric, Patterson & Jenny (2019), equations 3-4
+    A1 <- 1.340264; A2 <- -0.081106; A3 <- 0.000893; A4 <- 0.003796
+    th <- asin(pmin(pmax(sqrt(3) / 2 * sin(phi), -1), 1))
+    den <- 3 * (9 * A4 * th^8 + 7 * A3 * th^6 + 3 * A2 * th^2 + A1)
+    x <- (2 * sqrt(3) * lam * cos(th) / den) * 57.29577951
+    y <- (A4 * th^9 + A3 * th^7 + A2 * th^3 + A1 * th) * 57.29577951
   } else { # orthographic
     c0 <- (coord$centre %||% c(0, 0))
     l0 <- c0[1] * d2r; p0 <- c0[2] * d2r

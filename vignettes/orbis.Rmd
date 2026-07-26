@@ -135,8 +135,18 @@ orb_worldmap(values = vals, value_col = "v", projection = "robinson") +
   orb_labs(title = "A small choropleth")
 ```
 
-Five projections are built in. The orthographic one draws a globe and hides the
-hemisphere facing away from the viewer.
+Six projections are built in. `equalearth` is a good modern default for
+thematic maps: it is equal-area, so shaded country sizes are directly
+comparable, while keeping continents close to their familiar shapes.
+
+```{r}
+orb_worldmap(values = vals, value_col = "v", projection = "equalearth",
+             palette = "ice") +
+  orb_labs(title = "Equal Earth")
+```
+
+The orthographic projection draws a globe and hides the hemisphere facing away
+from the viewer.
 
 ```{r}
 orb_worldmap(projection = "orthographic", ocean = "#0B1F33") +
@@ -186,7 +196,8 @@ Set `orb_options(interactive = FALSE)` if a document must not contain scripts.
 
 ## What orbis does not do yet
 
-There is no faceting and there are no statistical layers, so summarise data
-before plotting. Text is measured approximately when laying out axes and
-legends. The bundled world map is simplified for figure-sized output rather
-than for detailed cartography.
+There are no statistical layers, so summarise data before plotting: there is no
+smoother, boxplot or histogram geometry yet. Text is measured approximately
+when laying out axes and legends, because the SVG writer does not query a font
+engine, so very long labels can be spaced imperfectly. The bundled world map is
+simplified for figure-sized output rather than for detailed cartography.

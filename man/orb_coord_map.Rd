@@ -33,15 +33,24 @@ greatly exaggerates high latitudes. Latitudes are clipped at
 \eqn{\pm}\code{max_lat}.}
 \item{\code{robinson}}{A compromise projection widely used for world maps.}
 \item{\code{mollweide}}{Equal-area pseudo-cylindrical projection.}
+\item{\code{equalearth}}{The Equal Earth projection of Savric, Patterson and
+Jenny (2019): equal-area, like Mollweide, but with continents shaped
+much closer to the familiar Robinson outline. A good modern default for
+thematic world maps, because areas are not distorted.}
 \item{\code{orthographic}}{A view of the globe from infinite distance, centred
 on \code{centre}; the hemisphere facing away from the viewer is hidden.}
 }
 }
 \examples{
 orb_worldmap() + orb_coord_map("robinson")
+orb_worldmap() + orb_coord_map("equalearth")
 orb_worldmap() + orb_coord_map("orthographic", centre = c(20, 15))
 }
 \references{
-Snyder, J. P. (1987) "Map Projections: A Working Manual."
-US Geological Survey Professional Paper 1395. \doi{10.3133/pp1395}
+Snyder, J. P. (1987) "Map Projections: A Working Manual." US Geological
+Survey Professional Paper 1395. \doi{10.3133/pp1395}
+
+Savric, B., Patterson, T. & Jenny, B. (2019) "The Equal Earth map
+projection." International Journal of Geographical Information Science 33,
+454-465. \doi{10.1080/13658816.2018.1504949}
 }

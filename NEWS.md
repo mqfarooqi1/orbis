@@ -9,8 +9,8 @@ First release.
   `orb_text()`.
 * Faceting with `orb_facet()`, with shared or free scales.
 * Geography built in: `orb_map()`, `orb_geo_points()`, `orb_worldmap()`, the
-  `world_map` dataset, and five projections via `orb_coord_map()`, including an
-  orthographic globe.
+  `world_map` dataset, and six projections via `orb_coord_map()`, including the equal-area
+  Equal Earth projection and an orthographic globe.
 * Scales, four themes and perceptually uniform palettes.
 * Output with `orb_save()` (SVG, HTML, PDF, PNG, TIFF, JPEG), `orb_svg()`,
   `orb_interactive()` and `orb_draw()`.
