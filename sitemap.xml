@@ -1,14 +1,15 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://mqfarooqi1.github.io/orbis/404.html</loc></url>
-<url><loc>https://mqfarooqi1.github.io/orbis/LICENSE-text.html</loc></url>
-<url><loc>https://mqfarooqi1.github.io/orbis/LICENSE.html</loc></url>
 <url><loc>https://mqfarooqi1.github.io/orbis/articles/index.html</loc></url>
 <url><loc>https://mqfarooqi1.github.io/orbis/articles/orbis.html</loc></url>
 <url><loc>https://mqfarooqi1.github.io/orbis/authors.html</loc></url>
 <url><loc>https://mqfarooqi1.github.io/orbis/index.html</loc></url>
+<url><loc>https://mqfarooqi1.github.io/orbis/LICENSE-text.html</loc></url>
+<url><loc>https://mqfarooqi1.github.io/orbis/LICENSE.html</loc></url>
 <url><loc>https://mqfarooqi1.github.io/orbis/news/index.html</loc></url>
 <url><loc>https://mqfarooqi1.github.io/orbis/reference/index.html</loc></url>
 <url><loc>https://mqfarooqi1.github.io/orbis/reference/orb.html</loc></url>
+<url><loc>https://mqfarooqi1.github.io/orbis/reference/orbis-package.html</loc></url>
 <url><loc>https://mqfarooqi1.github.io/orbis/reference/orb_area.html</loc></url>
 <url><loc>https://mqfarooqi1.github.io/orbis/reference/orb_bars.html</loc></url>
 <url><loc>https://mqfarooqi1.github.io/orbis/reference/orb_coord_cartesian.html</loc></url>
@@ -29,7 +30,6 @@
 <url><loc>https://mqfarooqi1.github.io/orbis/reference/orb_text.html</loc></url>
 <url><loc>https://mqfarooqi1.github.io/orbis/reference/orb_theme.html</loc></url>
 <url><loc>https://mqfarooqi1.github.io/orbis/reference/orb_worldmap.html</loc></url>
-<url><loc>https://mqfarooqi1.github.io/orbis/reference/orbis-package.html</loc></url>
 <url><loc>https://mqfarooqi1.github.io/orbis/reference/plus-.orb_spec.html</loc></url>
 <url><loc>https://mqfarooqi1.github.io/orbis/reference/world_map.html</loc></url>
 </urlset>
