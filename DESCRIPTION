@@ -3,7 +3,8 @@ Title: Interactive and High-Resolution Layered Graphics with Built-in World Maps
 Version: 0.1.0
 Authors@R:
     person("Muhammad", "Farooqi", email = "mqfarooqi@gmail.com",
-           role = c("aut", "cre"))
+           role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-4918-9791"))
 Description: A layered grammar of graphics that compiles plots to a
     resolution-independent scene description and renders it through two
     back-ends: a self-contained SVG writer with embedded 'JavaScript' for

@@ -35,16 +35,17 @@ with \code{\link[=orb_save]{orb_save()}}, or open the interactive version with \
 Useful links:
 \itemize{
   \item \url{https://github.com/mqfarooqi1/orbis}
+  \item \url{https://mqfarooqi1.github.io/orbis/}
   \item Report bugs at \url{https://github.com/mqfarooqi1/orbis/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Muhammad Farooqi \email{mqfarooqi@gmail.com}
+\strong{Maintainer}: Muhammad Farooqi \email{mqfarooqi@gmail.com} (\href{https://orcid.org/0000-0003-4918-9791}{ORCID})
 
 Authors:
 \itemize{
-  \item Muhammad Farooqi \email{mqfarooqi@gmail.com}
+  \item Muhammad Farooqi \email{mqfarooqi@gmail.com} (\href{https://orcid.org/0000-0003-4918-9791}{ORCID})
 }
 
 }
