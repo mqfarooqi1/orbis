@@ -21,6 +21,16 @@ orthographic globe — are built in.
 
 ## Installation
 
+From [R-universe](https://mqfarooqi1.r-universe.dev/orbis) (binaries, no
+build tools needed):
+
+``` r
+
+install.packages("orbis", repos = "https://mqfarooqi1.r-universe.dev")
+```
+
+Or the development version from GitHub:
+
 ``` r
 
 # install.packages("remotes")
