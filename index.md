@@ -37,6 +37,12 @@ Or the development version from GitHub:
 remotes::install_github("mqfarooqi1/orbis")
 ```
 
+Or as a container, with R and orbis already installed:
+
+``` bash
+docker run --rm -it ghcr.io/mqfarooqi1/orbis
+```
+
 orbis imports only base R packages plus `htmltools`.
 
 ## A first plot

@@ -3,7 +3,7 @@ pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   orbis: orbis.html
-last_built: 2026-07-26T11:39Z
+last_built: 2026-07-26T11:43Z
 urls:
   reference: https://mqfarooqi1.github.io/orbis/reference
   article: https://mqfarooqi1.github.io/orbis/articles
