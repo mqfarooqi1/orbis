@@ -15,15 +15,16 @@ htmltools, and contains no compiled code.
 ## R CMD check results
 
 Local `R CMD check --as-cran` (Windows 11, R 4.5.2):
-0 errors | 0 warnings | 1 note.
+0 errors | 1 warning | 1 note.
 
 * The note is the standard "New submission".
-* The only WARNING seen locally is `'qpdf' is needed for checks on size
-  reduction of PDFs`, which is an artefact of qpdf not being installed on the
-  local machine; it does not occur on systems that have qpdf.
+* The warning is `'qpdf' is needed for checks on size reduction of PDFs`. This
+  is an artefact of qpdf not being installed on the local machine; it does not
+  occur on systems that have qpdf, and no other warning is reported.
 
-GitHub Actions `R-CMD-check` passes on all five configurations: Ubuntu
-(release, devel and oldrel-1), Windows (release) and macOS (release).
+GitHub Actions `R-CMD-check` passes with 0 errors and 0 warnings on all five
+configurations: Ubuntu (release, devel and oldrel-1), Windows (release) and
+macOS (release).
 
 ## Notes for the reviewer
 
