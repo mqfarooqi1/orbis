@@ -98,6 +98,25 @@
     }
   }
 
+  ## ---- facet levels ------------------------------------------------------
+  fsp <- spec$facet
+  f_levels <- NULL
+  if (!is.null(fsp)) {
+    for (i in seq_along(L)) {
+      if (L[[i]]$layer$geom == "map") { L[[i]]$fv <- NULL; next }
+      dsrc <- L[[i]]$layer$data %||% spec$data
+      fv <- try(eval(fsp$by, dsrc, baseenv()), silent = TRUE)
+      if (inherits(fv, "try-error") || is.null(fv)) {
+        .stop("Cannot find the faceting variable `", deparse(fsp$by),
+              "` in the data.")
+      }
+      fv <- as.character(rep(fv, length.out = nrow(L[[i]]$df)))
+      L[[i]]$fv <- fv
+      f_levels <- union(f_levels, sort(unique(fv)))
+    }
+    if (!length(f_levels)) fsp <- NULL
+  }
+
   ## ---- discrete x handling ----------------------------------------------
   x_levels <- NULL
   for (l in L) {
@@ -185,6 +204,30 @@
   }
   show_legend <- !is.null(legend) && !identical(opts$legend, FALSE)
 
+  ## ---- resolve aesthetics once, globally --------------------------------
+  ## Colours, sizes and tooltips are computed across the whole data set, not
+  ## per panel, so faceted panels remain directly comparable.
+  for (i in seq_along(L)) {
+    lay <- L[[i]]$layer; d <- L[[i]]$df; pm <- lay$params
+    if (lay$geom == "map" || nrow(d) == 0) next
+    ch <- if (!is.null(d$colour)) "colour" else if (!is.null(d$fill)) "fill" else NULL
+    defcol <- pm$colour %||% pm$fill %||% th$accent
+    rc <- .resolve_colour(if (!is.null(ch)) d[[ch]] else NULL,
+                          spec$scales[[ch %||% "colour"]], defcol)
+    L[[i]]$cols <- rep(rc$cols, length.out = nrow(d))
+    L[[i]]$series <- if (!is.null(ch) && .is_discrete(d[[ch]]))
+      as.character(d[[ch]]) else rep(NA_character_, nrow(d))
+    L[[i]]$tips <- if (!is.null(d$tooltip)) as.character(d$tooltip) else {
+      lbl <- if (!is.null(d$label)) paste0(as.character(d$label), " | ") else ""
+      paste0(lbl, .fmt_num(as.numeric(if (is.numeric(d$x)) d$x else L[[i]]$px)),
+             ", ", .fmt_num(as.numeric(d$y %||% L[[i]]$py)))
+    }
+    if (lay$geom %in% c("points", "geo_points")) {
+      L[[i]]$radii <- rep(.resolve_size(d$size, spec$scales$size, pm$size)$sizes,
+                          length.out = nrow(d))
+    }
+  }
+
   ## ---- layout ------------------------------------------------------------
   has_title <- !is.null(spec$labs$title)
   has_sub <- !is.null(spec$labs$subtitle)
@@ -216,66 +259,147 @@
   }
   right <- 16 + legend_w
 
-  px0 <- left; px1 <- width - right
-  py0 <- top;  py1 <- height - bottom
-  if (px1 - px0 < 40) px1 <- px0 + 40
-  if (py1 - py0 < 40) py1 <- py0 + 40
-
-  ## preserve aspect for maps so the world is not stretched
-  if (is_geo || !is.null(spec$coord$ratio)) {
-    ratio <- spec$coord$ratio %||% 1
-    dx <- diff(xlim); dy <- diff(ylim)
-    avail_w <- px1 - px0; avail_h <- py1 - py0
-    sc <- min(avail_w / dx, avail_h / (dy * ratio))
-    w_used <- dx * sc; h_used <- dy * ratio * sc
-    cx <- (px0 + px1) / 2; cy <- (py0 + py1) / 2
-    px0 <- cx - w_used / 2; px1 <- cx + w_used / 2
-    py0 <- cy - h_used / 2; py1 <- cy + h_used / 2
-  }
-
-  X <- function(v) px0 + (v - xlim[1]) / (xlim[2] - xlim[1]) * (px1 - px0)
-  Y <- function(v) py1 - (v - ylim[1]) / (ylim[2] - ylim[1]) * (py1 - py0)
-
   marks <- list()
   add <- function(m) marks[[length(marks) + 1L]] <<- m
-
-  ## ---- background, grid, axes -------------------------------------------
   add(.mk("rect", x = 0, y = 0, w = width, h = height, fill = th$bg,
           stroke = NA, layer = "bg"))
-  add(.mk("rect", x = px0, y = py0, w = px1 - px0, h = py1 - py0,
-          fill = th$panel, stroke = NA, layer = "bg"))
 
+  ## ---- panel grid --------------------------------------------------------
+  area <- c(left, top, width - right, height - bottom)
+  n_panel <- max(1L, length(f_levels))
+  ncol_p <- if (!is.null(fsp) && !is.null(fsp$ncol)) fsp$ncol else
+    ceiling(sqrt(n_panel))
+  ncol_p <- max(1L, min(as.integer(ncol_p), n_panel))
+  nrow_p <- ceiling(n_panel / ncol_p)
+  strip_h <- if (!is.null(fsp)) bs * 1.9 else 0
+  gap_x <- if (!is.null(fsp)) 16 else 0
+  gap_y <- if (!is.null(fsp)) 12 else 0
+  cell_w <- (area[3] - area[1] - gap_x * (ncol_p - 1)) / ncol_p
+  cell_h <- (area[4] - area[2] - gap_y * (nrow_p - 1)) / nrow_p
+  free_x <- !is.null(fsp) && fsp$scales %in% c("free_x", "free")
+  free_y <- !is.null(fsp) && fsp$scales %in% c("free_y", "free")
   gridmode <- opts$grid %||% (if (is_geo) "none" else "both")
-  xbr <- if (!is.null(x_levels)) seq_along(x_levels) else
-    if (is_geo) numeric(0) else (sx$breaks %||% .breaks(xlim[1], xlim[2], 7))
-  xlab_txt <- if (!is.null(x_levels)) x_levels else
-    if (length(xbr)) .fmt_num(.invert_trans(xbr, sx$trans)) else character(0)
+  panel_rects <- list()
 
-  if (gridmode %in% c("both", "y")) {
-    for (b in ybr) add(.mk("line", x1 = px0, y1 = Y(b), x2 = px1, y2 = Y(b),
-                           stroke = th$grid, sw = 1, layer = "grid"))
-  }
-  if (gridmode %in% c("both", "x") && is.null(x_levels)) {
-    for (b in xbr) add(.mk("line", x1 = X(b), y1 = py0, x2 = X(b), y2 = py1,
-                           stroke = th$grid, sw = 1, layer = "grid"))
-  }
-  if (!is_geo) {
-    for (i in seq_along(ybr)) {
-      add(.mk("text", x = px0 - 8, y = Y(ybr[i]) + bs * 0.32, text = ylab_txt[i],
-              size = bs * 0.85, fill = th$axis, anchor = "end", layer = "axis"))
+  for (pk in seq_len(n_panel)) {
+    lev <- if (!is.null(fsp)) f_levels[pk] else NULL
+    r <- ceiling(pk / ncol_p); cc <- pk - (r - 1) * ncol_p
+
+    ## rows belonging to this panel, per layer
+    sel <- lapply(seq_along(L), function(i) {
+      if (is.null(fsp) || is.null(L[[i]]$fv)) seq_len(nrow(L[[i]]$df))
+      else which(L[[i]]$fv == lev)
+    })
+
+    ## panel-specific limits when scales are free
+    xlim_k <- xlim; ylim_k <- ylim
+    if (free_x || free_y) {
+      xa <- numeric(0); ya <- numeric(0)
+      for (i in seq_along(L)) {
+        s <- sel[[i]]
+        if (!length(s) || is.null(L[[i]]$px)) next
+        xa <- c(xa, L[[i]]$px[s]); ya <- c(ya, L[[i]]$py[s])
+        if (L[[i]]$layer$geom %in% c("bars", "area")) {
+          ya <- c(ya, L[[i]]$layer$params$baseline %||% 0)
+        }
+      }
+      xa <- xa[is.finite(xa)]; ya <- ya[is.finite(ya)]
+      if (free_x && length(xa)) {
+        xlim_k <- range(xa)
+        if (xlim_k[1] == xlim_k[2]) xlim_k <- xlim_k + c(-0.5, 0.5)
+        xlim_k <- xlim_k + c(-1, 1) * diff(xlim_k) * (sx$expand %||% 0.04)
+      }
+      if (free_y && length(ya)) {
+        ylim_k <- range(ya)
+        if (ylim_k[1] == ylim_k[2]) ylim_k <- ylim_k + c(-0.5, 0.5)
+        ylim_k <- ylim_k + c(-1, 1) * diff(ylim_k) * (sy$expand %||% 0.04)
+      }
     }
-    for (i in seq_along(xbr)) {
-      add(.mk("text", x = X(xbr[i]), y = py1 + bs * 1.4, text = xlab_txt[i],
-              size = bs * 0.85, fill = th$axis, anchor = "middle", layer = "axis"))
+
+    px0 <- area[1] + (cc - 1) * (cell_w + gap_x)
+    px1 <- px0 + cell_w
+    py0 <- area[2] + (r - 1) * (cell_h + gap_y) + strip_h
+    py1 <- area[2] + (r - 1) * (cell_h + gap_y) + cell_h
+    if (px1 - px0 < 30) px1 <- px0 + 30
+    if (py1 - py0 < 30) py1 <- py0 + 30
+
+    ## preserve aspect for maps so the world is not stretched
+    if (is_geo || !is.null(spec$coord$ratio)) {
+      ratio <- spec$coord$ratio %||% 1
+      dx <- diff(xlim_k); dy <- diff(ylim_k)
+      sc <- min((px1 - px0) / dx, (py1 - py0) / (dy * ratio))
+      w_used <- dx * sc; h_used <- dy * ratio * sc
+      cx <- (px0 + px1) / 2; cy <- (py0 + py1) / 2
+      px0 <- cx - w_used / 2; px1 <- cx + w_used / 2
+      py0 <- cy - h_used / 2; py1 <- cy + h_used / 2
     }
-    add(.mk("line", x1 = px0, y1 = py1, x2 = px1, y2 = py1,
-            stroke = th$axis, sw = 1, layer = "axis"))
-  }
+    panel_rects[[pk]] <- c(px0, py0, px1, py1)
+
+    X <- local({ a <- px0; b <- px1; l <- xlim_k
+      function(v) a + (v - l[1]) / (l[2] - l[1]) * (b - a) })
+    Y <- local({ a <- py0; b <- py1; l <- ylim_k
+      function(v) b - (v - l[1]) / (l[2] - l[1]) * (b - a) })
+
+    ## ---- panel background, grid, axes ------------------------------------
+    add(.mk("rect", x = px0, y = py0, w = px1 - px0, h = py1 - py0,
+            fill = th$panel, stroke = NA, layer = "bg"))
+
+    ybr_k <- if (is_geo) numeric(0) else
+      (sy$breaks %||% .breaks(ylim_k[1], ylim_k[2], if (is.null(fsp)) 6 else 4))
+    ylab_k <- if (length(ybr_k)) .fmt_num(.invert_trans(ybr_k, sy$trans)) else
+      character(0)
+    xbr <- if (!is.null(x_levels)) seq_along(x_levels) else
+      if (is_geo) numeric(0) else
+        (sx$breaks %||% .breaks(xlim_k[1], xlim_k[2], if (is.null(fsp)) 7 else 4))
+    xlab_txt <- if (!is.null(x_levels)) x_levels else
+      if (length(xbr)) .fmt_num(.invert_trans(xbr, sx$trans)) else character(0)
+
+    if (gridmode %in% c("both", "y")) {
+      for (b in ybr_k) add(.mk("line", x1 = px0, y1 = Y(b), x2 = px1, y2 = Y(b),
+                               stroke = th$grid, sw = 1, layer = "grid"))
+    }
+    if (gridmode %in% c("both", "x") && is.null(x_levels)) {
+      for (b in xbr) add(.mk("line", x1 = X(b), y1 = py0, x2 = X(b), y2 = py1,
+                             stroke = th$grid, sw = 1, layer = "grid"))
+    }
+    ## with shared scales only the outer panels are labelled, which keeps a
+    ## faceted plot readable; with free scales every panel needs its own
+    show_y <- !is_geo && (is.null(fsp) || cc == 1 || free_y)
+    show_x <- !is_geo && (is.null(fsp) || free_x || r == nrow_p ||
+                            (pk + ncol_p) > n_panel)
+    if (show_y) {
+      for (j in seq_along(ybr_k)) {
+        add(.mk("text", x = px0 - 8, y = Y(ybr_k[j]) + bs * 0.32,
+                text = ylab_k[j], size = bs * 0.85, fill = th$axis,
+                anchor = "end", layer = "axis"))
+      }
+    }
+    if (show_x) {
+      for (j in seq_along(xbr)) {
+        add(.mk("text", x = X(xbr[j]), y = py1 + bs * 1.4, text = xlab_txt[j],
+                size = bs * 0.85, fill = th$axis, anchor = "middle",
+                layer = "axis"))
+      }
+    }
+    if (!is_geo) {
+      add(.mk("line", x1 = px0, y1 = py1, x2 = px1, y2 = py1,
+              stroke = th$axis, sw = 1, layer = "axis"))
+    }
+    if (!is.null(fsp)) {
+      add(.mk("rect", x = px0, y = py0 - strip_h + 2, w = px1 - px0,
+              h = strip_h - 4, fill = th$grid, stroke = NA, r = 3,
+              layer = "bg"))
+      add(.mk("text", x = (px0 + px1) / 2, y = py0 - strip_h / 2 + bs * 0.42,
+              text = lev, size = bs * 0.88, fill = th$title, anchor = "middle",
+              weight = "600", layer = "axis"))
+    }
 
   ## ---- data layers -------------------------------------------------------
   for (i in seq_along(L)) {
-    lay <- L[[i]]$layer; d <- L[[i]]$df; pm <- lay$params
+    lay <- L[[i]]$layer; pm <- lay$params
     geom <- lay$geom
+    keep <- sel[[i]]
+    d <- if (geom == "map") L[[i]]$df else L[[i]]$df[keep, , drop = FALSE]
 
     if (geom == "map") {
       vals <- pm$values
@@ -337,25 +461,15 @@
       next
     }
 
-    if (nrow(d) == 0) next
-    xv <- L[[i]]$px; yv <- L[[i]]$py
-    vis <- L[[i]]$vis %||% rep(TRUE, length(xv))
-    ch <- if (!is.null(d$colour)) "colour" else if (!is.null(d$fill)) "fill" else NULL
-    defcol <- pm$colour %||% pm$fill %||% th$accent
-    rc <- .resolve_colour(if (!is.null(ch)) d[[ch]] else NULL,
-                          spec$scales[[ch %||% "colour"]], defcol)
-    cols <- rep(rc$cols, length.out = nrow(d))
-    series <- if (!is.null(ch) && .is_discrete(d[[ch]]))
-      as.character(d[[ch]]) else rep(NA_character_, nrow(d))
-    tips <- if (!is.null(d$tooltip)) as.character(d$tooltip) else {
-      lbl <- if (!is.null(d$label)) paste0(as.character(d$label), " | ") else ""
-      paste0(lbl, .fmt_num(as.numeric(if (is.numeric(d$x)) d$x else xv)), ", ",
-             .fmt_num(as.numeric(d$y %||% yv)))
-    }
+    if (nrow(d) == 0 || !length(keep)) next
+    xv <- L[[i]]$px[keep]; yv <- L[[i]]$py[keep]
+    vis <- (L[[i]]$vis %||% rep(TRUE, length(L[[i]]$px)))[keep]
+    cols <- L[[i]]$cols[keep]
+    series <- L[[i]]$series[keep]
+    tips <- L[[i]]$tips[keep]
 
     if (geom %in% c("points", "geo_points")) {
-      rs <- .resolve_size(d$size, spec$scales$size, pm$size)
-      radii <- rep(rs$sizes, length.out = nrow(d))
+      radii <- L[[i]]$radii[keep]
       ok <- which(is.finite(xv) & is.finite(yv) & vis)
       for (k in ok) {
         add(.mk("circle", x = X(xv[k]), y = Y(yv[k]), r = radii[k],
@@ -364,7 +478,7 @@
                 series = series[k]))
       }
     } else if (geom == "line") {
-      gvar <- d$group %||% (if (!is.null(ch)) d[[ch]] else NULL)
+      gvar <- d$group %||% (if (any(!is.na(series))) series else NULL)
       idx <- if (is.null(gvar)) list(seq_len(nrow(d))) else
         split(seq_len(nrow(d)), gvar)
       for (g in idx) {
@@ -378,7 +492,7 @@
       }
     } else if (geom == "area") {
       base <- Y(pm$baseline %||% 0)
-      gvar <- d$group %||% (if (!is.null(ch)) d[[ch]] else NULL)
+      gvar <- d$group %||% (if (any(!is.na(series))) series else NULL)
       idx <- if (is.null(gvar)) list(seq_len(nrow(d))) else
         split(seq_len(nrow(d)), gvar)
       for (g in idx) {
@@ -395,7 +509,7 @@
     } else if (geom == "bars") {
       slot <- if (!is.null(x_levels)) 1 else
         (if (length(unique(xv)) > 1) min(diff(sort(unique(xv)))) else 1)
-      bw <- abs(X(xlim[1] + slot) - X(xlim[1])) * pm$width
+      bw <- abs(X(xlim_k[1] + slot) - X(xlim_k[1])) * pm$width
       base <- Y(pm$baseline %||% 0)
       for (k in seq_len(nrow(d))) {
         if (!is.finite(xv[k]) || !is.finite(yv[k])) next
@@ -415,6 +529,7 @@
       }
     }
   }
+  }  ## end panel loop
 
   ## ---- titles ------------------------------------------------------------
   ty <- 10 + bs * 1.35
@@ -427,14 +542,15 @@
     add(.mk("text", x = 14, y = ty, text = spec$labs$subtitle, size = bs,
             fill = th$text, anchor = "start", layer = "anno"))
   }
+  ## axis titles sit against the whole plotting area, not one panel
   if (!is.null(spec$labs$x)) {
-    add(.mk("text", x = (px0 + px1) / 2,
+    add(.mk("text", x = (area[1] + area[3]) / 2,
             y = height - 12 - (if (has_cap) bs * 1.6 else 0),
             text = spec$labs$x, size = bs, fill = th$text, anchor = "middle",
             layer = "anno"))
   }
   if (!is.null(spec$labs$y)) {
-    add(.mk("text", x = 14, y = (py0 + py1) / 2, text = spec$labs$y,
+    add(.mk("text", x = 14, y = (area[2] + area[4]) / 2, text = spec$labs$y,
             size = bs, fill = th$text, anchor = "middle", rotate = -90,
             layer = "anno"))
   }
@@ -445,8 +561,8 @@
 
   ## ---- legend ------------------------------------------------------------
   if (show_legend) {
-    lx <- px1 + 20
-    ly <- py0 + 6
+    lx <- area[3] + 20
+    ly <- area[2] + 6
     if (!is.null(legend_title) && nzchar(legend_title)) {
       add(.mk("text", x = lx, y = ly, text = legend_title, size = bs * 0.9,
               fill = th$title, anchor = "start", weight = "600",
@@ -464,7 +580,7 @@
         ly <- ly + bs * 1.5
       }
     } else if (legend$type == "continuous") {
-      hgt <- min(160, py1 - ly - 10)
+      hgt <- min(160, area[4] - ly - 10)
       nstep <- 40
       at <- seq(1, 0, length.out = nstep)
       if (isTRUE(legend$reverse)) at <- rev(at)
@@ -495,6 +611,6 @@
   }
 
   list(width = width, height = height, marks = marks, theme = th,
-       panel = c(px0, py0, px1, py1),
+       panel = c(area[1], area[2], area[3], area[4]),
        interactive = !identical(opts$interactive, FALSE))
 }

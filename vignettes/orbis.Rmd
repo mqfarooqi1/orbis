@@ -70,6 +70,35 @@ orb(counts, x = g, y = v, fill = g) +
   orb_theme_ink()
 ```
 
+## Small multiples
+
+`orb_facet()` draws one panel per level of a variable. Panels share their scales
+by default, which is what makes them comparable at a glance.
+
+```{r}
+orb(mtcars, x = wt, y = mpg, colour = hp) +
+  orb_points() +
+  orb_facet(cyl) +
+  orb_labs(title = "By cylinder count", x = "Weight", y = "MPG")
+```
+
+Use `scales = "free"` (or `"free_x"`, `"free_y"`) when panels cover very
+different ranges, and `ncol` to control the grid:
+
+```{r}
+set.seed(3)
+d <- data.frame(t = rep(1:40, 3),
+                v = c(cumsum(rnorm(40)), cumsum(rnorm(40, 0.3)),
+                      cumsum(rnorm(40, -0.2))),
+                region = rep(c("north", "south", "east"), each = 40))
+orb(d, x = t, y = v) +
+  orb_area(alpha = 0.3) + orb_line() +
+  orb_facet(region, ncol = 3, scales = "free_y")
+```
+
+Colours and sizes are resolved across the whole data set rather than per panel,
+so a colour means the same thing everywhere.
+
 ## Scales
 
 Scales set palettes, limits and axis transformations.

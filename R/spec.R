@@ -24,7 +24,7 @@ orb <- function(data, ...) {
   structure(
     list(data = data, mapping = .capture_mapping(...), layers = list(),
          labs = list(), theme = orb_theme_light(), scales = list(),
-         coord = list(type = "cartesian"), opts = list()),
+         coord = list(type = "cartesian"), facet = NULL, opts = list()),
     class = "orb_spec")
 }
 
@@ -75,6 +75,8 @@ orb <- function(data, ...) {
     e1$scales[[e2$channel]] <- e2
   } else if (inherits(e2, "orb_coord")) {
     e1$coord <- unclass(e2)
+  } else if (inherits(e2, "orb_facet")) {
+    e1$facet <- unclass(e2)
   } else if (inherits(e2, "orb_opts")) {
     e1$opts <- utils::modifyList(e1$opts, unclass(e2))
   } else {

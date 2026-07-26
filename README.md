@@ -66,6 +66,22 @@ orb_worldmap(values = gdp, value_col = "v", projection = "orthographic",
 Projections available: `equirectangular`, `mercator`, `robinson`, `mollweide`
 and `orthographic`. Points can be placed on any of them with `orb_geo_points()`.
 
+## Small multiples
+
+```r
+orb(mtcars, x = wt, y = mpg, colour = hp) +
+  orb_points() +
+  orb_facet(cyl) +
+  orb_labs(title = "Small multiples by cylinder count")
+```
+
+<img src="man/figures/facet.png" width="100%" />
+
+Panels share their scales by default, so they are directly comparable; pass
+`scales = "free"` (or `"free_x"` / `"free_y"`) to let each panel stretch to its
+own data. Colours and sizes are always resolved across the whole data set, so a
+value means the same thing in every panel.
+
 ## Interactive, then print-ready — from one object
 
 The same plot object produces both. Nothing is re-specified:
@@ -91,6 +107,7 @@ pan, double-click to reset, and click a legend key to hide or show that series.
 | `orb_points()`, `orb_line()`, `orb_bars()`, `orb_area()`, `orb_text()` | Layers |
 | `orb_map()`, `orb_geo_points()`, `orb_worldmap()` | Geographic layers |
 | `orb_coord_map()` | Five map projections, including an orthographic globe |
+| `orb_facet()` | Small multiples: one panel per level, shared or free scales |
 | `orb_scale_colour()`, `orb_scale_fill()`, `orb_scale_size()`, `orb_scale_x()`, `orb_scale_y()` | Scales, limits, log and square-root axes |
 | `orb_theme_light()`, `orb_theme_dark()`, `orb_theme_minimal()`, `orb_theme_ink()` | Themes |
 | `orb_save()`, `orb_svg()`, `orb_interactive()`, `orb_draw()` | Output |
@@ -102,7 +119,6 @@ pan, double-click to reset, and click a legend key to hide or show that series.
 orbis is young, and it is not a drop-in replacement for a mature plotting
 package. In particular:
 
-* **No faceting yet.** Small multiples are the obvious next feature.
 * **No statistical layers.** There is no smoother, no boxplot and no histogram
   geometry; summarise your data first.
 * **Text metrics are approximated** when laying out axes and legends, because
