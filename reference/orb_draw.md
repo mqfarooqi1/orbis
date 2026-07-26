@@ -33,7 +33,7 @@ f <- tempfile(fileext = ".png")
 grDevices::png(f, width = 820, height = 520)
 orb_draw(p)
 grDevices::dev.off()
-#> agg_record_189e128b6fd8 
-#>                       2 
+#> agg_record_1951d2748db 
+#>                      2 
 unlink(f)
 ```
