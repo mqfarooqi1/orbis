@@ -1,0 +1,163 @@
+---
+title: "Getting started with orbis"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with orbis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+```{r setup}
+library(orbis)
+```
+
+orbis describes a plot with a layered grammar, then compiles that description
+to a scene of drawing primitives. Because the scene is resolution independent,
+the same plot object can become an interactive figure in a browser or a 600 dpi
+image for a journal, with nothing re-specified.
+
+## The grammar
+
+A plot starts with data and a mapping from variables to visual channels. Layers
+are added with `+`.
+
+```{r}
+p <- orb(mtcars, x = wt, y = mpg, colour = hp, size = disp) +
+  orb_points() +
+  orb_labs(title = "Fuel economy", x = "Weight (1000 lbs)",
+           y = "Miles per gallon", colour = "Horsepower")
+p
+```
+
+Recognised channels are `x`, `y`, `colour` (or `color`), `fill`, `size`,
+`label`, `group` and `tooltip`. A mapping given inside a layer applies to that
+layer only.
+
+Continuous variables mapped to colour use a perceptually uniform ramp;
+character or factor variables get a qualitative palette and an interactive
+legend.
+
+```{r}
+orb(mtcars, x = wt, y = mpg, colour = factor(cyl)) +
+  orb_points() +
+  orb_theme_dark()
+```
+
+## Layers
+
+```{r}
+set.seed(1)
+df <- data.frame(t = 1:80, v = cumsum(rnorm(80, 0.05)))
+
+orb(df, x = t, y = v) +
+  orb_area(alpha = 0.3) +
+  orb_line(width = 2, smooth = TRUE) +
+  orb_labs(title = "A smoothed series")
+```
+
+`orb_bars()` accepts a discrete `x`:
+
+```{r}
+counts <- data.frame(g = c("alpha", "beta", "gamma", "delta"),
+                     v = c(23, 41, 17, 35))
+orb(counts, x = g, y = v, fill = g) +
+  orb_bars() +
+  orb_options(legend = FALSE, grid = "y") +
+  orb_theme_ink()
+```
+
+## Scales
+
+Scales set palettes, limits and axis transformations.
+
+```{r}
+orb(mtcars, x = wt, y = mpg, colour = hp) +
+  orb_points() +
+  orb_scale_colour("magma", reverse = TRUE) +
+  orb_scale_size(range = c(3, 16)) +
+  orb_scale_y(limits = c(10, 35))
+```
+
+Available palettes:
+
+```{r}
+orb_palettes()
+```
+
+## Maps
+
+A simplified world dataset ships with the package.
+
+```{r}
+str(world_map)
+```
+
+`orb_worldmap()` is the quickest way to a map. Supply `values` to shade regions
+by a variable.
+
+```{r}
+vals <- data.frame(region = c("Brazil", "India", "France", "China", "Nigeria"),
+                   v = c(3, 9, 5, 8, 6))
+orb_worldmap(values = vals, value_col = "v", projection = "robinson") +
+  orb_labs(title = "A small choropleth")
+```
+
+Five projections are built in. The orthographic one draws a globe and hides the
+hemisphere facing away from the viewer.
+
+```{r}
+orb_worldmap(projection = "orthographic", ocean = "#0B1F33") +
+  orb_coord_map("orthographic", centre = c(20, 15)) +
+  orb_theme_dark()
+```
+
+Points are placed on the active projection with `orb_geo_points()`:
+
+```{r}
+cities <- data.frame(
+  long = c(2.35, -74.0, 151.2, 77.2, -43.2),
+  lat  = c(48.86, 40.7, -33.87, 28.6, -22.9),
+  pop  = c(11, 19, 5, 32, 13)
+)
+orb(cities, x = long, y = lat, size = pop) +
+  orb_map(fill = "#E9ECEF") +
+  orb_geo_points(colour = "#F76707") +
+  orb_coord_map("robinson") +
+  orb_labs(title = "Cities")
+```
+
+## Output
+
+One plot object, several destinations. The format follows the file extension.
+
+```{r, eval = FALSE}
+orb_save(p, "figure.png", dpi = 600)   # high-resolution raster for print
+orb_save(p, "figure.pdf")              # vector
+orb_save(p, "figure.svg")              # vector, still interactive
+orb_save(p, "figure.html")             # self-contained interactive page
+orb_interactive(p)                     # open in the viewer
+```
+
+Raster output is laid out at `width` x `height` logical pixels and then
+rendered at the requested `dpi`, so a 300 or 600 dpi figure keeps the same
+proportions as what you saw on screen.
+
+The interactive output supports:
+
+* hovering a mark for a tooltip,
+* scrolling to zoom and dragging to pan,
+* double-clicking to reset the view,
+* clicking a legend key to hide or show that series.
+
+Set `orb_options(interactive = FALSE)` if a document must not contain scripts.
+
+## What orbis does not do yet
+
+There is no faceting and there are no statistical layers, so summarise data
+before plotting. Text is measured approximately when laying out axes and
+legends. The bundled world map is simplified for figure-sized output rather
+than for detailed cartography.

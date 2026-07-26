@@ -1,0 +1,12 @@
+^\.git$
+^\.gitignore$
+^data-raw$
+^smoke\.R$
+^chk\.R$
+^rng\.R$
+^showcase\.R$
+^LICENSE\.md$
+^cran-comments\.md$
+^.*\.Rproj$
+^\.Rproj\.user$
+^\.github$

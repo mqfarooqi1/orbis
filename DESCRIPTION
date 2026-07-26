@@ -1,0 +1,40 @@
+Package: orbis
+Title: Interactive and High-Resolution Layered Graphics with Built-in World Maps
+Version: 0.1.0
+Authors@R:
+    person("Muhammad", "Farooqi", email = "mqfarooqi@gmail.com",
+           role = c("aut", "cre"))
+Description: A layered grammar of graphics that compiles plots to a
+    resolution-independent scene description and renders it through two
+    back-ends: a self-contained SVG writer with embedded 'JavaScript' for
+    interactive figures (tooltips, hover highlighting, zoom, pan and legend
+    toggling) and R's own graphics devices for publication-quality output at
+    any resolution. Geographic layers are first class: a simplified world
+    polygon dataset ships with the package and can be drawn with several map
+    projections, including equirectangular, Mercator, Robinson and an
+    orthographic globe. Projections follow Snyder (1987)
+    <doi:10.3133/pp1395>; line simplification uses Douglas and Peucker (1973)
+    <doi:10.3138/FM57-6770-U75U-7727>.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Language: en-GB
+Depends:
+    R (>= 4.1.0)
+Imports:
+    grDevices,
+    grid,
+    stats,
+    utils,
+    htmltools
+Suggests:
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown,
+    spelling
+VignetteBuilder: knitr
+URL: https://github.com/mqfarooqi1/orbis
+BugReports: https://github.com/mqfarooqi1/orbis/issues
+Config/testthat/edition: 3
+Roxygen: list(markdown = TRUE)
+LazyData: true
+Config/roxygen2/version: 8.0.0
