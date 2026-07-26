@@ -3,18 +3,17 @@
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/mqfarooqi1/orbis/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mqfarooqi1/orbis/actions/workflows/R-CMD-check.yaml)
+[![R-universe](https://mqfarooqi1.r-universe.dev/badges/orbis)](https://mqfarooqi1.r-universe.dev/orbis)
 [![Documentation](https://img.shields.io/badge/docs-pkgdown-4C6EF5.svg)](https://mqfarooqi1.github.io/orbis/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 <!-- badges: end -->
 
 <!--
-CRAN badges: add these back once the package is accepted on CRAN, and the
-R-universe badge once the first R-universe build has completed. Before then
+CRAN badges: add these back once the package is accepted on CRAN. Before then
 they render as broken images, because the badge services have nothing to report.
 
 [![CRAN status](https://www.r-pkg.org/badges/version/orbis)](https://CRAN.R-project.org/package=orbis)
 [![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/orbis)](https://CRAN.R-project.org/package=orbis)
-[![R-universe](https://mqfarooqi1.r-universe.dev/badges/orbis)](https://mqfarooqi1.r-universe.dev/orbis)
 -->
 
 **A layered grammar of graphics for R that is interactive by default, sharp at
@@ -35,6 +34,15 @@ package, and six map projections — including Equal Earth and an orthographic g
 in.
 
 ## Installation
+
+From [R-universe](https://mqfarooqi1.r-universe.dev/orbis) (binaries, no build
+tools needed):
+
+```r
+install.packages("orbis", repos = "https://mqfarooqi1.r-universe.dev")
+```
+
+Or the development version from GitHub:
 
 ```r
 # install.packages("remotes")
