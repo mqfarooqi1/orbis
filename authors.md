@@ -7,7 +7,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/mqfarooqi1/orbis/blob/HEAD/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/mqfarooqi1/orbis/blob/main/DESCRIPTION)
 
 Farooqi M (2026). *orbis: Interactive and High-Resolution Layered
 Graphics with Built-in World Maps*. R package version 0.1.0,
