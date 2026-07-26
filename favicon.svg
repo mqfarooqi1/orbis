@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 231" width="200" height="231" role="img" aria-label="orbis"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/"><rdf:Description><dc:creator>RealFaviconGenerator</dc:creator><dc:source>https://realfavicongenerator.net</dc:source></rdf:Description></rdf:RDF></metadata><defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0%" stop-color="#141B2E"></stop>
+      <stop offset="55%" stop-color="#0E1425"></stop>
+      <stop offset="100%" stop-color="#080C18"></stop>
+    </linearGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4C6EF5"></stop>
+      <stop offset="45%" stop-color="#12B886"></stop>
+      <stop offset="100%" stop-color="#F59F00"></stop>
+    </linearGradient>
+    <radialGradient id="sea" cx="38%" cy="32%" r="78%">
+      <stop offset="0%" stop-color="#1E4B7A"></stop>
+      <stop offset="70%" stop-color="#123456"></stop>
+      <stop offset="100%" stop-color="#0A1F38"></stop>
+    </radialGradient>
+    <clipPath id="disc"><circle cx="100" cy="99" r="52"></circle></clipPath>
+  </defs><polygon points="100,3 197,58 197,173 100,228 3,173 3,58" fill="url(#bg)"></polygon><g>
+    <circle cx="100" cy="99" r="52" fill="url(#sea)"></circle>
+    <g clip-path="url(#disc)" fill="none" stroke="#3C6E9C" stroke-width="0.9" opacity="0.55">
+      <ellipse cx="100" cy="99" rx="52" ry="18"></ellipse>
+      <ellipse cx="100" cy="99" rx="52" ry="36"></ellipse>
+      <ellipse cx="100" cy="99" rx="18" ry="52"></ellipse>
+      <ellipse cx="100" cy="99" rx="36" ry="52"></ellipse>
+      <line x1="48" y1="99" x2="152" y2="99"></line>
+      <line x1="100" y1="47" x2="100" y2="151"></line>
+    </g>
+    <!-- stylised land masses -->
+    <g clip-path="url(#disc)">
+      <path d="M62 72 q10-9 22-5 t18 3 q6 7-2 12 t-19 6 q-14 1-19-6 z" fill="#12B886" opacity="0.9"></path>
+      <path d="M92 95 q13-4 20 4 t4 20 q-3 12-13 16 t-15-8 q-4-13 0-20 z" fill="#4C6EF5" opacity="0.9"></path>
+      <path d="M120 66 q14-3 20 6 t-3 15 q-9 6-17 1 t-6-16 z" fill="#F59F00" opacity="0.85"></path>
+      <path d="M56 108 q10 2 12 12 t-6 16 q-10 2-14-8 t2-18 z" fill="#E64980" opacity="0.8"></path>
+      <path d="M126 116 q12 1 15 11 t-8 14 q-9 0-11-9 t0-14 z" fill="#15AABF" opacity="0.85"></path>
+    </g>
+    <circle cx="100" cy="99" r="52" fill="none" stroke="url(#rim)" stroke-width="2.6"></circle>
+  </g><g>
+    <rect x="46" y="171" width="9" height="14" rx="2" fill="#4C6EF5"></rect>
+    <rect x="59" y="164" width="9" height="21" rx="2" fill="#12B886"></rect>
+    <rect x="72" y="157" width="9" height="28" rx="2" fill="#F59F00"></rect>
+    <polyline points="92,182 106,170 120,175 134,159 148,164" fill="none" stroke="#E64980" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></polyline>
+    <circle cx="92" cy="182" r="2.8" fill="#E64980"></circle>
+    <circle cx="134" cy="159" r="2.8" fill="#E64980"></circle>
+    <circle cx="148" cy="164" r="2.8" fill="#E64980"></circle>
+  </g><text x="100" y="206" font-size="25" text-anchor="middle" fill="#F1F3F5" font-family="'Inter','Segoe UI',Helvetica,Arial,sans-serif" font-weight="700" letter-spacing="1.5">orbis</text><polygon points="100,3 197,58 197,173 100,228 3,173 3,58" fill="none" stroke="url(#rim)" stroke-width="5"></polygon></svg>
