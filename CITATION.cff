@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use orbis, please cite it as below."
+title: "orbis: Interactive and High-Resolution Layered Graphics with Built-in World Maps"
+abstract: >-
+  A layered grammar of graphics that compiles plots to a resolution-independent scene description and renders it as interactive SVG or at any resolution through R's graphics devices, with built-in world maps and map projections.
+type: software
+authors:
+  - given-names: Muhammad
+    family-names: Farooqi
+    email: mqfarooqi@gmail.com
+    orcid: "https://orcid.org/0000-0003-4918-9791"
+version: 0.1.0
+date-released: "2026-07-27"
+license: MIT
+repository-code: "https://github.com/mqfarooqi1/orbis"
+url: "https://github.com/mqfarooqi1/orbis"
+keywords:
+  - R
+  - CRAN
