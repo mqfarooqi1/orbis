@@ -12,12 +12,12 @@ Source:
 
 Farooqi M (2026). *orbis: Interactive and High-Resolution Layered
 Graphics with Built-in World Maps*. R package version 0.1.0,
-<https://github.com/mqfarooqi1/orbis>.
+<https://CRAN.R-project.org/package=orbis>.
 
     @Manual{,
       title = {{orbis: Interactive and High-Resolution Layered Graphics with Built-in World Maps}},
       author = {Muhammad Farooqi},
       year = {2026},
       note = {R package version 0.1.0},
-      url = {https://github.com/mqfarooqi1/orbis},
+      url = {https://CRAN.R-project.org/package=orbis},
     }

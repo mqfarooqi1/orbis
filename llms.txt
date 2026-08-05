@@ -21,8 +21,15 @@ orthographic globe — are built in.
 
 ## Installation
 
-From [R-universe](https://mqfarooqi1.r-universe.dev/orbis) (binaries, no
-build tools needed):
+orbis is on CRAN:
+
+``` r
+
+install.packages("orbis")
+```
+
+Or from [R-universe](https://mqfarooqi1.r-universe.dev/orbis), which
+carries binaries built from the latest commit:
 
 ``` r
 

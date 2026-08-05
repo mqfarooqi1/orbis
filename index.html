@@ -72,10 +72,9 @@
 <!-- badges: start -->
 
 <!--
-CRAN badges: add these back once the package is accepted on CRAN. Before then
-they render as broken images, because the badge services have nothing to report.
+Download badge: uncomment once CRAN's logs have caught up, a day or two after
+publication. Until then it renders as "downloads null".
 
-[![CRAN status](https://www.r-pkg.org/badges/version/orbis)](https://CRAN.R-project.org/package=orbis)
 [![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/orbis)](https://CRAN.R-project.org/package=orbis)
 -->
 <p><strong>A layered grammar of graphics for R that is interactive by default, sharp at any resolution, and knows the world map.</strong></p>
@@ -89,21 +88,24 @@ they render as broken images, because the badge services have nothing to report.
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>From <a href="https://mqfarooqi1.r-universe.dev/orbis" class="external-link">R-universe</a> (binaries, no build tools needed):</p>
+<p>orbis is on CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"orbis"</span><span class="op">)</span></span></code></pre></div>
+<p>Or from <a href="https://mqfarooqi1.r-universe.dev/orbis" class="external-link">R-universe</a>, which carries binaries built from the latest commit:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"orbis"</span>, repos <span class="op">=</span> <span class="st">"https://mqfarooqi1.r-universe.dev"</span><span class="op">)</span></span></code></pre></div>
 <p>Or the development version from GitHub:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"mqfarooqi1/orbis"</span><span class="op">)</span></span></code></pre></div>
 <p>Or as a container, with R and orbis already installed:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> <span class="at">-it</span> ghcr.io/mqfarooqi1/orbis</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">--rm</span> <span class="at">-it</span> ghcr.io/mqfarooqi1/orbis</span></code></pre></div>
 <p>orbis imports only base R packages plus <code>htmltools</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="a-first-plot">A first plot<a class="anchor" aria-label="anchor" href="#a-first-plot"></a>
 </h2>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mqfarooqi1/orbis" class="external-link">orbis</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/orb.html">orb</a></span><span class="op">(</span><span class="va">mtcars</span>, x <span class="op">=</span> <span class="va">wt</span>, y <span class="op">=</span> <span class="va">mpg</span>, colour <span class="op">=</span> <span class="va">hp</span>, size <span class="op">=</span> <span class="va">disp</span><span class="op">)</span> <span class="op">+</span></span>
@@ -115,13 +117,13 @@ they render as broken images, because the badge services have nothing to report.
 <div class="section level2">
 <h2 id="the-world-built-in">The world, built in<a class="anchor" aria-label="anchor" href="#the-world-built-in"></a>
 </h2>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/orb_worldmap.html">orb_worldmap</a></span><span class="op">(</span>values <span class="op">=</span> <span class="va">gdp</span>, value_col <span class="op">=</span> <span class="st">"v"</span>, projection <span class="op">=</span> <span class="st">"robinson"</span>,</span>
 <span>             palette <span class="op">=</span> <span class="st">"mako"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="reference/orb_labs.html">orb_labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"World choropleth"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/choropleth.png" width="100%" alt="World choropleth in the Robinson projection, countries shaded by value"></p>
 <p>Switch one argument for a globe:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/orb_worldmap.html">orb_worldmap</a></span><span class="op">(</span>values <span class="op">=</span> <span class="va">gdp</span>, value_col <span class="op">=</span> <span class="st">"v"</span>, projection <span class="op">=</span> <span class="st">"orthographic"</span>,</span>
 <span>             palette <span class="op">=</span> <span class="st">"ember"</span>, ocean <span class="op">=</span> <span class="st">"#0B1F33"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="reference/orb_coord_map.html">orb_coord_map</a></span><span class="op">(</span><span class="st">"orthographic"</span>, centre <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">25</span>, <span class="fl">20</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -131,7 +133,7 @@ they render as broken images, because the badge services have nothing to report.
 <div class="section level2">
 <h2 id="small-multiples">Small multiples<a class="anchor" aria-label="anchor" href="#small-multiples"></a>
 </h2>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/orb.html">orb</a></span><span class="op">(</span><span class="va">mtcars</span>, x <span class="op">=</span> <span class="va">wt</span>, y <span class="op">=</span> <span class="va">mpg</span>, colour <span class="op">=</span> <span class="va">hp</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="reference/orb_points.html">orb_points</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="reference/orb_facet.html">orb_facet</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span> <span class="op">+</span></span>
@@ -143,7 +145,7 @@ they render as broken images, because the badge services have nothing to report.
 <h2 id="interactive-then-print-ready--from-one-object">Interactive, then print-ready — from one object<a class="anchor" aria-label="anchor" href="#interactive-then-print-ready--from-one-object"></a>
 </h2>
 <p>The same plot object produces both. Nothing is re-specified:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/orb.html">orb</a></span><span class="op">(</span><span class="va">mtcars</span>, x <span class="op">=</span> <span class="va">wt</span>, y <span class="op">=</span> <span class="va">mpg</span>, colour <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="reference/orb_points.html">orb_points</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/orb_interactive.html">orb_interactive</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>                  <span class="co"># opens in the viewer: hover, zoom, pan</span></span>
@@ -286,6 +288,7 @@ they render as broken images, because the badge services have nothing to report.
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
+<li><a href="https://CRAN.R-project.org/package=orbis" class="external-link"><img src="https://www.r-pkg.org/badges/version/orbis" alt="CRAN status"></a></li>
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
 <li><a href="https://github.com/mqfarooqi1/orbis/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/mqfarooqi1/orbis/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://mqfarooqi1.r-universe.dev/orbis" class="external-link"><img src="https://mqfarooqi1.r-universe.dev/badges/orbis" alt="R-universe"></a></li>
