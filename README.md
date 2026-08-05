@@ -1,6 +1,7 @@
 # orbis <a href="https://mqfarooqi1.github.io/orbis/"><img src="man/figures/logo.png" align="right" height="139" alt="orbis website" /></a>
 
 <!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/orbis)](https://CRAN.R-project.org/package=orbis)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/mqfarooqi1/orbis/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mqfarooqi1/orbis/actions/workflows/R-CMD-check.yaml)
 [![R-universe](https://mqfarooqi1.r-universe.dev/badges/orbis)](https://mqfarooqi1.r-universe.dev/orbis)
@@ -9,10 +10,9 @@
 <!-- badges: end -->
 
 <!--
-CRAN badges: add these back once the package is accepted on CRAN. Before then
-they render as broken images, because the badge services have nothing to report.
+Download badge: uncomment once CRAN's logs have caught up, a day or two after
+publication. Until then it renders as "downloads null".
 
-[![CRAN status](https://www.r-pkg.org/badges/version/orbis)](https://CRAN.R-project.org/package=orbis)
 [![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/orbis)](https://CRAN.R-project.org/package=orbis)
 -->
 
@@ -35,8 +35,14 @@ in.
 
 ## Installation
 
-From [R-universe](https://mqfarooqi1.r-universe.dev/orbis) (binaries, no build
-tools needed):
+orbis is on CRAN:
+
+```r
+install.packages("orbis")
+```
+
+Or from [R-universe](https://mqfarooqi1.r-universe.dev/orbis), which carries
+binaries built from the latest commit:
 
 ```r
 install.packages("orbis", repos = "https://mqfarooqi1.r-universe.dev")

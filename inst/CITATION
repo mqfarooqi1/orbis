@@ -5,5 +5,5 @@ bibentry(
                     comment = c(ORCID = "0000-0003-4918-9791")),
   year     = "2026",
   note     = "R package version 0.1.0",
-  url      = "https://github.com/mqfarooqi1/orbis"
+  url      = "https://CRAN.R-project.org/package=orbis"
 )
